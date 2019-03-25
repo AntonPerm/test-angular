@@ -78,14 +78,14 @@ export class EmailsEditorComponent {
 		alert(`Кол-во email ${this.emailsArr.length}`);
 	}
 
-	private onDeleteClick(emailId: number) {
-		this.emailsArr = this.emailsArr.filter(item => item.id !== emailId);
-	}
-
-	private handleCtrlVClick() {
+	public handleCtrlVClick() {
 		setTimeout(() => {
 			this.addItem(this.emailName);
 		}, 1);
+	}
+
+	private onDeleteClick(emailId: number) {
+		this.emailsArr = this.emailsArr.filter(item => item.id !== emailId);
 	}
 
 	private addItem(emailName: string) {
