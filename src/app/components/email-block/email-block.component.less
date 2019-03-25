@@ -1,0 +1,29 @@
+.mailElem {
+	display: flex;
+	align-items: center;
+	margin: 5px 0 0 10px;
+	padding: 1px 5px;
+	border-radius: 15px;
+	background: #d4e4ff;
+	font-size: 15px;
+
+	&.dotted {
+		border-style: none none dotted none;
+		border-width: 2px;
+		border-color: red;
+	}
+
+	&:not.dotted {
+		padding-bottom: 2px;
+	}
+}
+
+.closeIcon {
+	padding-left: 2px;
+	padding-top: 1px;
+	width: 15px;
+	height: 15px;
+	cursor: pointer;
+}
+
+
