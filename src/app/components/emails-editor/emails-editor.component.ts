@@ -16,11 +16,11 @@ import {IEmail} from '../../types/emailsEditor';
                     <input
                             class="input-elem fontClass"
                             placeholder="add more people..."
-                            (keydown.enter)="this.addItem(this.emailName)"
+                            (keydown.enter)="handleEnterOrBlur()"
                             (keydown.control.v)="handleCtrlVClick()"
                             (keydown.backspace)="handleBackspaceClick()"
                             (keydown)="keyDown($event)"
-							(blur)="this.addItem(this.emailName)"
+							(blur)="handleEnterOrBlur()"
                             [(ngModel)]="emailName"
                     />
                 </div>
@@ -41,6 +41,10 @@ export class EmailsEditorComponent {
 
 	private mailHostArr = ['yandex', 'mail', 'yahoo', 'gmail', 'rambler'];
 	private domainsArr = ['ru', 'com', 'au', 'at', 'az', 'al'];
+
+	public handleEnterOrBlur() {
+		this.addItem(this.emailName);
+	}
 
 	public keyDown(event) {
 		if (event.code === 'Comma') {
