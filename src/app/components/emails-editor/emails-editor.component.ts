@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {IEmail} from '../../types/emailsEditor';
 
 @Component({
@@ -14,19 +14,20 @@ import {IEmail} from '../../types/emailsEditor';
                             (onDeleteClick)="onDeleteClick($event)"
                     ></app-email-block>
                     <input
-                            class="input-elem"
+                            class="input-elem fontClass"
                             placeholder="add more people..."
-                            (keydown.enter)="handleEnterClick()"
+                            (keydown.enter)="this.addItem(this.emailName)"
                             (keydown.control.v)="handleCtrlVClick()"
                             (keydown.backspace)="handleBackspaceClick()"
                             (keydown)="keyDown($event)"
+							(blur)="this.addItem(this.emailName)"
                             [(ngModel)]="emailName"
                     />
                 </div>
             </div>
             <div class="actions-block">
-                <button (click)="addEmail()">Add email</button>
-                <button (click)="getEmailCount()">Get email count</button>
+                <button class="fontClass" (click)="addEmail()">Add email</button>
+                <button class="fontClass" (click)="getEmailCount()">Get email count</button>
             </div>
         </div>
 	`,
@@ -34,20 +35,9 @@ import {IEmail} from '../../types/emailsEditor';
 })
 
 export class EmailsEditorComponent {
-	emailName = '';
+	@Input() emailsArr: IEmail[];
 
-	emailsArr: IEmail[] = [
-		{
-			id: 1,
-			name: 'petrov@yandex.ru',
-			isCorrect: true
-		},
-		{
-			id: 2,
-			name: 'ivanov@google',
-			isCorrect: false
-		}
-	];
+	public emailName = '';
 
 	private mailHostArr = ['yandex', 'mail', 'yahoo', 'gmail', 'rambler'];
 	private domainsArr = ['ru', 'com', 'au', 'at', 'az', 'al'];
@@ -57,10 +47,6 @@ export class EmailsEditorComponent {
 			this.addItem(this.emailName);
 			event.stopPropagation();
 		}
-	}
-
-	public handleEnterClick() {
-		this.addItem(this.emailName);
 	}
 
 	public handleBackspaceClick() {
@@ -75,7 +61,13 @@ export class EmailsEditorComponent {
 	}
 
 	public getEmailCount() {
-		alert(`Кол-во email ${this.emailsArr.length}`);
+		const validLength: number = this.emailsArr.reduce((result, current) => {
+			if (current.isCorrect) {
+				result += 1;
+			}
+			return result;
+		}, 0);
+		alert(`Кол-во валидных email ${validLength}`);
 	}
 
 	public handleCtrlVClick() {
@@ -89,6 +81,9 @@ export class EmailsEditorComponent {
 	}
 
 	private addItem(emailName: string) {
+		if (!emailName) {
+			return;
+		}
 
 		// взято с http://emailregex.com/
 		const regexp = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -97,6 +92,7 @@ export class EmailsEditorComponent {
 			name: this.emailName.length > 0 ? this.emailName : emailName,
 			isCorrect: regexp.test(this.emailName.length > 0 ? this.emailName : emailName)
 		};
+
 		this.emailsArr.push(tempEmail);
 		setTimeout(() => {
 			this.emailName = '';
@@ -116,6 +112,4 @@ export class EmailsEditorComponent {
 		}
 		return text;
 	}
-
-
 }
