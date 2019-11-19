@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {IEmail} from '../../types/emailsEditor';
 
 @Component({
@@ -54,7 +54,9 @@ export class EmailsEditorComponent {
 	}
 
 	public handleBackspaceClick() {
-		this.emailsArr.splice(-1, 1);
+		if (this.emailName.length === 0) {
+			this.emailsArr.splice(-1, 1);
+		}
 	}
 
 	public addEmail() {
